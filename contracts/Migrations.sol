@@ -1,11 +1,18 @@
-pragma solidity >=0.4.21 <0.7.0;
+pragma solidity ^0.5.0;
 
 contract Migrations {
+  uint migrationCount=0;
   address public owner;
   uint public last_completed_migration;
 
   constructor() public {
     owner = msg.sender;
+  }
+
+  struct Exodus {
+    uint id;
+    string content;
+    bool completed;
   }
 
   modifier restricted() {
