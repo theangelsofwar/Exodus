@@ -15,6 +15,12 @@ contract Migrations {
     bool completed;
   }
 
+  mapping(uint => Exodus) public roko;
+
+  function executeRoko(string memory _content) public {
+    migrationCount++;
+    Exodus[migrationCount] = Exodus(migrationCount, _content, false);
+  }
   modifier restricted() {
     if (msg.sender == owner) _;
   }

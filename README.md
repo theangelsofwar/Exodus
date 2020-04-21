@@ -85,3 +85,14 @@ With ganache open:
 > truffle console
 In the cconsole:
 > exodus = await Migrations.deployed()
+
+
+add functionality to the contract, and reset the migrate
+> truffle migrate --reset
+
+> truffle console
+> exodus = await Exodus.deployed()
+Mapped as getting all
+
+> exodus = await Exodus.deployed(1)
+The Id 
