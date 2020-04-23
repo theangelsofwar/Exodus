@@ -1,7 +1,6 @@
-pragma solidity ^0.5.0;
+pragma solidity >=0.4.21 <0.6.0;
 
 contract Migrations {
-  uint migrationCount=0;
   address public owner;
   uint public last_completed_migration;
 
@@ -9,23 +8,16 @@ contract Migrations {
     owner = msg.sender;
   }
 
-  struct Exodus {
-    uint id;
-    string content;
-    bool completed;
-  }
-
-  mapping(uint => Exodus) public roko;
-
-  function executeRoko(string memory _content) public {
-    migrationCount++;
-    Exodus[migrationCount] = Exodus(migrationCount, _content, false);
-  }
   modifier restricted() {
     if (msg.sender == owner) _;
   }
 
   function setCompleted(uint completed) public restricted {
     last_completed_migration = completed;
+  }
+
+  function upgrade(address new_address) public restricted {
+    Migrations upgraded = Migrations(new_address);
+    upgraded.setCompleted(last_completed_migration);
   }
 }
