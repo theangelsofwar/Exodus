@@ -1,7 +1,7 @@
 # Exodus
 A Mass Migration into Web3 as we venture to the age of decentralization
 
-
+Goals of Building a Decentralized React MVP:
 1. Reading and Writing Data from a block chain
 2. Business Logic to run application purpose
 
@@ -13,7 +13,28 @@ Then:
 > npx create-react-app exodus --template typescript 
 tsconfig has already been added
 
+
+
+
+
+Different Types of Networks on Ether:
+1. Local Network: Ganache 
+2. Testnet(ropsten, rinkeby, )
+3. Mainnet(Requires ETH)
+
+We will be developing on the local Ganache Network, 
+Download https://www.trufflesuite.com/ganache
+
+Install a wallet like MetaMask for the browser to interact with the Ether Blockchain. 
+Add to Chrome: https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en
+Metamask does this by injecting the scope of Ethereum Blockchain into the browser once it is configured through through. 
+
 > npm install -g truffle@5.0.2
+
+
+
+
+
 
 Switch to top Folder in order to create a "Server" Folder
 > truffle init
