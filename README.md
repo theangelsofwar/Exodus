@@ -7,14 +7,15 @@ Goals of Building a Decentralized React MVP:
 
 
 Note: create-react-app is no longer global, if it is in your global directory, use:
-> npm ininstall -g create-react-app
+> npm install -g create-react-app
 
 Then: 
 > npx create-react-app exodus --template typescript 
 tsconfig has already been added
 
+It is recommended to use a type system as smart contracts on the blockchain are immutable. 
 
-
+If you decide to use prop-types with Javascript, just remember that prop-types will show errors during runtime while typescript types will not pass compile time. 
 
 
 Different Types of Networks on Ether:
@@ -27,14 +28,11 @@ Download https://www.trufflesuite.com/ganache
 
 Install a wallet like MetaMask for the browser to interact with the Ether Blockchain. 
 Add to Chrome: https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en
+
+Create a metamask account and be sure to store the credentials, since it is on the blockchain, if lost, you cannot retrieve it again. This is the tradeoff of the inherent annonymity of the Ether.  
 Metamask does this by injecting the scope of Ethereum Blockchain into the browser once it is configured through through. 
 
 > npm install -g truffle@5.0.2
-
-
-
-
-
 
 Switch to top Folder in order to create a "Server" Folder
 > truffle init
@@ -117,3 +115,10 @@ Mapped as getting all
 
 > exodus = await Exodus.deployed(1)
 The Id 
+
+
+
+Important React Dependencies:
+> npm install web3
+> npm install truffle
+> npm install 
