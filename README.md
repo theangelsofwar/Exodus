@@ -39,6 +39,7 @@ Switch to top Folder in order to create a "Server" Folder
 Creates a contracts and migrations folder
 > touch package.json
 Install dependencies in root folder
+> 
 
 Necessary:
 
@@ -119,6 +120,14 @@ The Id
 
 
 Important React Dependencies:
+> npm install react reactdom typescript 
 > npm install web3
 > npm install truffle
-> npm install 
+
+
+
+The ABI File:
+The ABI is the application binary interface
+- The smart contract ABI describes indexing and behavior. 
+- contains the address of the smart contract
+

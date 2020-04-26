@@ -2,6 +2,7 @@ import React { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import Web3 from 'web3';
 import './App.css';
+import { EXODUS_ABI, EXODUS_ADDRESS } from './config';
 
 function App() {
   
@@ -12,7 +13,7 @@ function App() {
   const loadBlockchainData = async () => {
     const web3 = new Web3(Web3.givenProvider || "http://localhost:8545");
     const accounts = await web3.eth.getAccounts();
-    setAccounts({ accounts }); //use of async
+    setAccounts( { accounts: accounts[0] } ); //use of async
     //a web3 instance 
   };
 
@@ -26,7 +27,7 @@ function App() {
         </p>
         <a
           className="App-link"
-          href="https://reactjs.org"
+          href="https://angiechangpagne.com"
           target="_blank"
           rel="noopener noreferrer"
         >
