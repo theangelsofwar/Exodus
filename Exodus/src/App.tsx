@@ -9,9 +9,8 @@ function App() {
   const [accounts, setAccounts] = useState([]);
   
 
-
   const loadBlockchainData = async () => {
-    const web3 = new Web3(Web3.givenProvider || "http://localhost:8545");
+    const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
     const accounts = await web3.eth.getAccounts();
     setAccounts( { accounts: accounts[0] } ); //use of async
     //a web3 instance 

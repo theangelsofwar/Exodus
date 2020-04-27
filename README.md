@@ -39,7 +39,8 @@ Switch to top Folder in order to create a "Server" Folder
 Creates a contracts and migrations folder
 > touch package.json
 Install dependencies in root folder
-> 
+> npm install -g ethereumjs-testrpc
+
 
 Necessary:
 
@@ -131,3 +132,7 @@ The ABI is the application binary interface
 - The smart contract ABI describes indexing and behavior. 
 - contains the address of the smart contract
 
+
+
+TO DO:
+- MORE SOLIDITY DEV TOOLS, 
