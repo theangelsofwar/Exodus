@@ -15,8 +15,32 @@ class ExodusList extends Component {
             }}
             type="text"
             className="form-control"
-            placeholder=""
+            placeholder="Execute Exodus"
+            required />
+          <input type="submit" hidden={true} />
         </form>
+        <ul id="exodusList" className="exodusList">
+          { this.props.exodusList.map((exodus, key) => {
+            return(
+              <div className="exodus" className="checkbox" key={key}>
+                <label>
+                  <input 
+                    type="checkbox"
+                    name={exodus.id}
+                    defaultChecked={exodus.completed}
+                    ref={(input) => {
+                      this.checkbox = input
+                    }}
+                    onClick={(event) => {
+                      this.props.toggleCompleted(this.checkbox.name) 
+                    }} />
+                    <span className="content"> {exodus.content} </span>
+                    }}
+                </label>
+              </div> 
+            )
+          })}
+        </ul>
       </div>
 
     )
