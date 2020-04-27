@@ -11,7 +11,7 @@ class ExodusList extends Component {
           <input 
             id="newExodus"
             ref={(input) => {
-              this.task = input
+              this.exodus = input
             }}
             type="text"
             className="form-control"
@@ -19,10 +19,10 @@ class ExodusList extends Component {
             required />
           <input type="submit" hidden={true} />
         </form>
-        <ul id="exodusList" className="exodusList">
+        <ul id="exodusList" className="exodusList>
           { this.props.exodusList.map((exodus, key) => {
             return(
-              <div className="exodus" className="checkbox" key={key}>
+              <div className="checkbox" key={key}>
                 <label>
                   <input 
                     type="checkbox"
@@ -32,17 +32,18 @@ class ExodusList extends Component {
                       this.checkbox = input
                     }}
                     onClick={(event) => {
-                      this.props.toggleCompleted(this.checkbox.name) 
-                    }} />
+                      this.props.toggleCompleted(this.checkbox.name) }} />
                     <span className="content"> {exodus.content} </span>
-                    }}
                 </label>
               </div> 
             )
           })}
         </ul>
+        <ul id="completedExodusList" className="list-unstyled">
+        </ul>
       </div>
-
-    )
+    );
   }
 }
+
+export default ExodusList;

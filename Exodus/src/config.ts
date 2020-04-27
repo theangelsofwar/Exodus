@@ -9,7 +9,7 @@ export const EXODUS_ABI = [
         "type": "uint256"
       }
     ],
-    "name": "tasks",
+    "name": "exodusArray",
     "outputs": [
       {
         "name": "id",
@@ -70,7 +70,7 @@ export const EXODUS_ABI = [
         "type": "bool"
       }
     ],
-    "name": "TaskCreated",
+    "name": "ExodusCreated",
     "type": "event",
     "signature": "0x05d0fb833127fc08168556d0e7ca9554fc3f6bc843b3b7d2bf1c35aea6bab660"
   },
@@ -88,7 +88,7 @@ export const EXODUS_ABI = [
         "type": "bool"
       }
     ],
-    "name": "TaskCompleted",
+    "name": "ExodusCompleted",
     "type": "event",
     "signature": "0xe21fa966ca5cd02748c0752352d18c48165e61cb55b4c29cccf924b5a95fcff1"
   },
@@ -100,7 +100,7 @@ export const EXODUS_ABI = [
         "type": "string"
       }
     ],
-    "name": "createTask",
+    "name": "createExodus",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
