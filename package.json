@@ -1,14 +1,15 @@
 {
   "name": "exodus",
   "version": "1.0.0",
-  "description": "an ethereum-react-app",
+  "description": "Exodus: The Great Migration",
   "main": "truffle-config.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
     "dev": "lite-server",
-    "test": "echo \"Error: no test specified\" && sexit 1"
+    "test": "echo \"Error: no test specified\" && sexit 1",
+    "start": "lite-server"
   },
   "author": "angiechangpagne@gmail.com",
   "license": "MIT",

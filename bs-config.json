@@ -1,6 +1,6 @@
 {
   "server" : [
-    "./src",
+    "./exodus-react/src",
     "./build/contracts"
   ],
   "routes" : {
