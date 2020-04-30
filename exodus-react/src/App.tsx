@@ -1,26 +1,26 @@
+import { EXODUS_LIST_ABI, EXODUS_LIST_ADDRESS } from './config';
+import Web3 from 'web3';
 import React, { Component } from 'react';
 import logo from './logo.svg';
-import Web3 from 'web3';
+
 import './App.css';
-import { EXODUS_LIST_ABI, EXODUS_LIST_ADDRESS } from './config';
 import ExodusList from './ExodusList';
 
-interface Props {
-  currentAccount: any,
-  exodusCount: any,
-  localExodusArray: any,
-  exodusList: any,
-  loading: any
-}
-
-
+//exodus list is the smart contract, while exodusArray is the entire list iteself
+// interface Props {
+//   account: any,
+//   exodusCount: any,
+//   exodusArray: any,
+//   exodusList: any,
+//   loading: any
+// }
 class App extends Component {
-  constructor(props: Props){
+  constructor(props: any) {
     super(props);
     this.state = {
-      currentAccount: '',
+      account: '',
       exodusCount: 0,
-      localExodusArray: [],
+      exodusArray: [],
       exodusList: [],
       loading: true
     }
@@ -31,20 +31,19 @@ class App extends Component {
   componentWillMount() {
     this.loadBlockchainData();
   }
-
-  async loadBlockchainData(){
-    const web3 = new Web3(Web3.givenProvider || "http://localhost:8545");
-    const accounts = await web3.eth.getAccounts();
-    this.setState({ currentAccount: accounts[0] });
-    const exodusList = new web3.eth.Contract(EXODUS_LIST_ABI, EXODUS_LIST_ADDRESS);
-    this.setState({ exodusList});
-    const exodusCount = await exodusList.methods.exodusCount().call();
+  async loadBlockchainData() {
+    var web3 = new Web3(Web3.givenProvider || "http://localhost:8545");
+    var accounts = await web3.eth.getAccounts();
+    this.setState({ account: accounts[0] });
+    var exodusList = new web3.eth.Contract(EXODUS_LIST_ABI, EXODUS_LIST_ADDRESS);
+    this.setState({ exodusList });
+    var exodusCount = await exodusList.methods.exodusCount().call();
     this.setState({ exodusCount });
-    for(var i = 1; i <= exodusCount; i++){
+    for(let i = 1; i <= exodusCount; i++) {
       //  holy fucking shit the reason is that solidity indexes at 1 dumb fucking bitch
-      const exodus = await exodusList.methods.exodusArray(i).call();
+      var exodus = await exodusList.methods.exodusArray(i).call();
       this.setState({
-        localExodusArray: [...this.state.localExodusArray, exodus]
+        exodusArray: [...this.state.exodusArray, exodus]
       })
     }
     this.setState({ loading: false })
@@ -53,22 +52,24 @@ class App extends Component {
 
   createExodus(content: any){
     this.setState({ loading: true });
-    this.state.exodusList.methods.createExodus(content).send({ from: this.state.currentAccount })
+    this.state.exodusList.methods.createExodus(content).send({ from: this.state.account })
     .once('receipt', (receipt: any) => {
       console.log('receipt', receipt);
-      this.setState({ loading: false });
-    });
+      this.setState({ loading: false })
+    })
   }
 
   toggleCompleted(exodusId: any){
     this.setState({ loading: true });
-    this.state.exodusList.methods.toggleCompleted(exodusId).send({ from: this.state.currentAccount })
+    this.state.exodusList.methods.toggleCompleted(exodusId).send({ from: this.state.account })
     .once('receipt', (receipt: any) => {
       this.setState({ loading: false });
     });
   }
+  //essentially you are accessing the current exodusList that is the interceptor between the blockchain and the current client, you invoke the function from their contract abi address that is declared as public, then you must send ether on the transaction for the decentralized application
+  //and the ether is sent from you current account detected through metamask in the browser, and it communicates with ganache in the truffle cli - so you have to make sure that a. the ports are all matched up and in sync, b. test networks are aligned c. ropsten must be on server for solidity and client side and brower's mask. 
 
-  render(){
+  render() {
     return(
       <div className="app">
         <nav className="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
@@ -80,12 +81,12 @@ class App extends Component {
         <div className="container-fluid">
           <main>
             { this.state.loading 
-            ? <div id="loader">Loading...</div>  
-            : <ExodusList 
-              exodusArray={this.state.localExodusArray} 
+            ? (<div id="loader">Loading...</div>)  
+            : (<ExodusList 
+              exodusArray={this.state.exodusArray} 
               createExodus={this.createExodus}
               toggleCompleted={this.toggleCompleted} 
-            />
+            />)
             }
           </main>
         </div>

@@ -1,42 +1,35 @@
 import React, { Component } from 'react';
 
-interface Props{
+interface Props {
+  exodusArray: any,
   createExodus: any,
-  exodus: any,
-  exodusArray: any
+  toggleExodus: any
 }
 class ExodusList extends Component {
-
-  constructor({ createExodus, exodus, exodusArray }: Props){
-    super({ createExodus, exodus, exodusArray });
+  constructor({ exodusArray, createExodus, toggleExodus }: Props) {
+    super({ exodusArray, createExodus, toggleExodus });
     this.state = {
-      exodus: exodus,
-      createExodus: createExodus,
       exodusArray: exodusArray,
-      completed: exodus.completed
+      createExodus: createExodus, 
+      toggleExodus: toggleExodus
     }
-
     this.handleCompletedChange=this.handleCompletedChange.bind(this);
     this.handleSubmit= this.handleSubmit.bind(this);
   }
 
   handleCompletedChange = (event: any) => {
-    const exodus = this.state.exodus;
-    let completed = event.target.value;
-    exodus.completed = completed;
-    this.setState{ exodus };
+  
   }
 
   handleExodusChange = (event: any) => {
-
+    this.setState({ [event.target.name] : event.target.value });
   }
 
 
   handleSubmit = (event: any) => {
     event.preventDefault();
-    this.state.createExodus(event.target.value);
+    this.props.createExodus(event.target.value);
   }
-
 
   render() {
     return (
@@ -44,7 +37,7 @@ class ExodusList extends Component {
         <form onSubmit={this.handleSubmit} >
           <input 
             id="newExodus"
-            onChange={this.handleChange}
+            onChange={this.handleExodusChange}
             type="text"
             className="form-control"
             placeholder="Execute Exodus"
@@ -62,8 +55,8 @@ class ExodusList extends Component {
                     defaultChecked={exodus.completed}
                     onChange={this.handleCompletedChange}
                     onClick={(event) => {
-                      this.props.toggleCompleted(this.state.exodus.name) }} />
-                    <span className="content"> {this.state.exodus.content} </span>
+                      this.props.toggleCompleted(exodus.name) }} />
+                    <span className="content"> {exodus.content} </span>
                 </label>
               </div>)
            })
