@@ -2,9 +2,9 @@ import { EXODUS_LIST_ABI, EXODUS_LIST_ADDRESS } from './config';
 import Web3 from 'web3';
 import React, { Component } from 'react';
 import logo from './logo.svg';
-
 import './App.css';
 import ExodusList from './ExodusList';
+import 'ethereumjs-testrpc';
 
 //exodus list is the smart contract, while exodusArray is the entire list iteself
 // interface Props {
@@ -31,24 +31,148 @@ class App extends Component {
   componentWillMount() {
     this.loadBlockchainData();
   }
-  async loadBlockchainData() {
-    var web3 = new Web3(Web3.givenProvider || "http://localhost:8545");
+
+  async loadBlockchainData (){
+    var web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:8545/'));
+    web3.eth.defaultAccount = web3.eth.accounts[0];
     var accounts = await web3.eth.getAccounts();
     this.setState({ account: accounts[0] });
-    var exodusList = new web3.eth.Contract(EXODUS_LIST_ABI, EXODUS_LIST_ADDRESS);
+
+    const exodusList = new web3.eth.Contract([
+      {
+        "constant": true,
+        "inputs": [
+          {
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "name": "exodusArray",
+        "outputs": [
+          {
+            "name": "id",
+            "type": "uint256"
+          },
+          {
+            "name": "content",
+            "type": "string"
+          },
+          {
+            "name": "completed",
+            "type": "bool"
+          }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function",
+        "signature": "0x31083c35"
+      },
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "exodusCount",
+        "outputs": [
+          {
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function",
+        "signature": "0xf272981e"
+      },
+      {
+        "inputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "constructor",
+        "signature": "constructor"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "name": "id",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "name": "content",
+            "type": "string"
+          },
+          {
+            "indexed": false,
+            "name": "completed",
+            "type": "bool"
+          }
+        ],
+        "name": "ExodusCreated",
+        "type": "event",
+        "signature": "0xda9c69875c8bda438cb662aeb1b1ec3345465461e7b73b80eabef4ea3ce1b955"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "name": "id",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "name": "completed",
+            "type": "bool"
+          }
+        ],
+        "name": "ExodusCompleted",
+        "type": "event",
+        "signature": "0xc307b46956092b7b032ee91ff3d43bc0e144e7db2efb6077ddcd6a5dfdb5dfdd"
+      },
+      {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "_content",
+            "type": "string"
+          }
+        ],
+        "name": "createExodus",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function",
+        "signature": "0x3fa00ba9"
+      },
+      {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "_id",
+            "type": "uint256"
+          }
+        ],
+        "name": "toggleCompleted",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function",
+        "signature": "0x455f5024"
+      }
+    ], 0x43ea664467C2572B4e8B3E9c9f627EFB14D8BbF9);
     this.setState({ exodusList });
-    var exodusCount = await exodusList.methods.exodusCount().call();
+    const exodusCount = await exodusList.methods.exodusCount().call();
     this.setState({ exodusCount });
     for(let i = 1; i <= exodusCount; i++) {
       //  holy fucking shit the reason is that solidity indexes at 1 dumb fucking bitch
-      var exodus = await exodusList.methods.exodusArray(i).call();
+      let exodus = await exodusList.methods.exodusArray(i).call();
       this.setState({
         exodusArray: [...this.state.exodusArray, exodus]
       })
     }
     this.setState({ loading: false })
   }
-
 
   createExodus(content: any){
     this.setState({ loading: true });
