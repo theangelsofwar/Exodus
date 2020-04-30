@@ -20,7 +20,7 @@ If you decide to use prop-types with Javascript, just remember that prop-types w
 
 Different Types of Networks on Ether:
 1. Local Network: Ganache 
-2. Testnet(ropsten, rinkeby, )
+2. Testnet(ropsten, rinkeby, goerli, kovan)
 3. Mainnet(Requires ETH)
 
 We will be developing on the local Ganache Network, 
@@ -125,6 +125,16 @@ Important React Dependencies:
 > npm install web3
 > npm install truffle
 
+
+
+- to reset a contract(since they are immutable)
+> truffle migrate --reset
+
+> truffle compile
+
+> truffle migrate
+
+Get new abi and address
 
 
 The ABI File:

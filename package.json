@@ -11,7 +11,7 @@
     "test": "echo \"Error: no test specified\" && sexit 1",
     "start": "lite-server"
   },
-  "author": "angiechangpagne@gmail.com",
+  "author": "yvevestal@protonmail.com",
   "license": "MIT",
   "devDependencies": {
     "bootstrap": "4.1.3",

@@ -2,7 +2,7 @@ pragma solidity ^0.5.0;
 
 contract ExodusList {
   uint public exodusCount = 0;
-  //number of exits from web3
+  //number of exits from web
 
   struct Exodus {
     uint id;
@@ -27,7 +27,6 @@ contract ExodusList {
   constructor() public {
     createExodus("The future is distributed by the humans");
   }
-
   function createExodus(string memory _content) public {
     exodusCount ++;
     exodusArray[exodusCount] = Exodus(exodusCount, _content, false);
