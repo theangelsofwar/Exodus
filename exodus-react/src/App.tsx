@@ -1,32 +1,72 @@
 // import { EXODUS_LIST_ABI, EXODUS_LIST_ADDRESS } from './config';
 // import * as  Web3 from 'web3';
-import React, { Component } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import './App.css';
 import ExodusList from './ExodusList';
+import TruffleContract from 'truffle-contract';
 // import 'ethereumjs-testrpc';
 import Web3 from 'web3';
 //exodus list is the smart contract, while exodusArray is the entire list iteself
 
 //creating a closure
 var whereyouat = window as any;
-if (window.hasOwnProperty('web3')) {
-  whereyouat.web3 = new Web3(whereyouat.web3.currentProvider);
-} else {
-  whereyouat.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
-}
-var exodusListContract;
-//<ExodusList> & Readonly<{}> & Readonly<{ children?: ReactNode; }>
 
-class App extends Component<{}, 
-{ 
-  account: any,
-  exodusCount: any,
-  exodusArray: ReadonlyArray<{}>,
-  exodusListContract: Readonly<{ methods: { } }>,
-  loading: any,
-  web3: any,
-}> {
-  async loadBlockchainData () {
+
+const initialState : any = {
+  accounts: [],
+  exodusContract: {},
+  web3: {},
+  ccount: '0x0',
+  exodusCount: 0,
+  exodusArray: [],
+  loading: true
+};
+
+const reducer = (state: any, action: any) => ({
+    accounts: action.accounts,
+    exodusContract: action.exodusContract,
+    web3: action.web3
+  })
+
+const App = () => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const [value, setValue] = useState('none');
+
+
+  useEffect(() => {
+
+  })
+  accounts: [],
+  exodusContract: {},
+  web3: {},
+  ccount: '0x0',
+  exodusCount: 0,
+  exodusArray: [],
+  loading: true
+
+
+    if (whereyouat.hasOwnProperty('web3') || typeof web3 != 'undefined') {
+      whereyouat.web3 = new Web3(whereyouat.web3.currentProvider);
+      this.web3Provider = web3.currentProvider;
+    } else {
+      whereyouat.web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
+      this.web3Provider = whereyouat.web3;
+    }
+    var exodusListContract;
+    //<ExodusList> & Readonly<{}> & Readonly<{ children?: ReactNode; }>
+    this.web3 = new Web3(this.web3Provider);
+    this.exodusContract = TruffleContract(ExodusList);
+    this.exodusContract.setProvider(this.web3Provider);
+
+
+    this.createExodus = this.createExodus.bind(this);
+    this.toggleCompleted = this.toggleCompleted.bind(this);
+  
+
+  
+    this.loadBlockchainData();
+
+  const loadBlockchainData = async () =>  {
     const web3 = whereyouat.web3;
     //this.state.web3;
     //new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
@@ -172,29 +212,7 @@ class App extends Component<{},
     this.setState({ loading: false })
   }
 
-
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      account: '',
-      exodusCount: 0,
-      exodusArray: [],
-      exodusListContract: { methods: { } },
-      loading: true,
-      web3: whereyouat.web3,
-    }
-    this.createExodus = this.createExodus.bind(this);
-    this.toggleCompleted = this.toggleCompleted.bind(this);
-  }
-
-  componentWillMount() {
-    var web3 = whereyouat.web3;
-    //new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
-    this.setState({ web3 });
-    this.loadBlockchainData();
-  }
-
-  createExodus(content: string) {
+  const createExodus = (content: string) => {
     this.setState({ loading: true });
     exodusListContract.methods.createExodus(content).send({ from: this.state.account })
     .on('receipt', (receipt: any) => {
@@ -204,7 +222,7 @@ class App extends Component<{},
     })
   }
 
-  toggleCompleted(exodusId: number) {
+ const toggleCompleted = (exodusId: number) => {
     this.setState({ loading: true });
     exodusListContract.methods.toggleCompleted(exodusId).send({ from: this.state.account })
     .on('receipt', (receipt: any) => {
@@ -214,7 +232,7 @@ class App extends Component<{},
   //essentially you are accessing the current exodusList that is the interceptor between the blockchain and the current client, you invoke the function from their contract abi address that is declared as public, then you must send ether on the transaction for the decentralized application
   //and the ether is sent from you current account detected through metamask in the browser, and it communicates with ganache in the truffle cli - so you have to make sure that a. the ports are all matched up and in sync, b. test networks are aligned c. ropsten must be on server for solidity and client side and brower's mask. 
 
-  render() {
+ 
     return(
       <React.Fragment>
       <div className="app">
@@ -238,8 +256,7 @@ class App extends Component<{},
         </div>
       </div>
       </React.Fragment>
-    );
-  }
+    )
 }
 
 export default App;
