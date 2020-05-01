@@ -1,44 +1,37 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
-interface Props {
-  exodusArray: any,
+const initialState: any = {
+  exodusArray: [],
   createExodus: any,
-  toggleExodus: any
+  toggleExodus: any,
 }
-const ExodusListCompound = () => {
-  constructor({ exodusArray, createExodus, toggleExodus }: Props, {
+const ExodusListCompound = (props: any) => {
+  const [exodusArray, setExodusArray] = useState([]);
+  const [createExodus, setCreateExodus] = useState({});
+  const [toggleExodus, setToggleExodus] = useState({});
+  // const context = useContext(App);
+
+  const handleCompletedChange = (event: any) => {
     
-  }) {
-    super({ exodusArray, createExodus, toggleExodus });
-    this.state = {
-      exodusArray: exodusArray,
-      createExodus: createExodus, 
-      toggleExodus: toggleExodus
-    }
-    this.handleCompletedChange=this.handleCompletedChange.bind(this);
-    this.handleSubmit= this.handleSubmit.bind(this);
   }
 
-  handleCompletedChange = (event: any) => {
-  
-  }
-
-  handleExodusChange = (event: any) => {
-    this.setState({ [event.target.name] : event.target.value });
+  const handleExodusChange = (event: any) => {
+    // this.setState({ [event.target.name] : event.target.value });
   }
 
 
-  handleSubmit = (event: any) => {
+  const handleSubmit = (event: any) => {
     event.preventDefault();
-    this.props.createExodus(event.target.value);
+    props.createExodus(event.target.value);
   }
-    return (
-      <React.Fragment>
+
+
+    return(
       <div id="content">
-        <form onSubmit={this.handleSubmit} >
+        <form onSubmit={handleSubmit} >
           <input 
             id="newExodus"
-            onChange={this.handleExodusChange}
+            onChange={handleExodusChange}
             type="text"
             className="form-control"
             placeholder="Execute Exodus"
@@ -54,7 +47,7 @@ const ExodusListCompound = () => {
                     type="checkbox"
                     name={exodus.id}
                     defaultChecked={exodus.completed}
-                    onChange={this.handleCompletedChange}
+                    onChange={handleCompletedChange}
                     onClick={(event) => {
                       this.props.toggleCompleted(exodus.name) }} />
                     <span className="content"> {exodus.content} </span>
@@ -66,7 +59,6 @@ const ExodusListCompound = () => {
         <ul id="completedExodusList" className="list-unstyled">
         </ul>
       </div>
-      </React.Fragment>
     )
 }
 
