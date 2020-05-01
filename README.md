@@ -146,3 +146,7 @@ The ABI is the application binary interface
 
 TO DO:
 - MORE SOLIDITY DEV TOOLS, 
+
+
+Great TypeChain Dev Tool For Typescript/Solidity Web3 Interactions:
+https://github.com/ethereum-ts/TypeChain

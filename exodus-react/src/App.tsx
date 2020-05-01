@@ -8,12 +8,13 @@ import Web3 from 'web3';
 //exodus list is the smart contract, while exodusArray is the entire list iteself
 
 //creating a closure
-var wa = window as any;
+var whereyouat = window as any;
 if (window.hasOwnProperty('web3')) {
-  wa.web3 = new Web3(wa.web3.currentProvider);
+  whereyouat.web3 = new Web3(whereyouat.web3.currentProvider);
 } else {
-  wa.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
+  whereyouat.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
 }
+var exodusListContract;
 //<ExodusList> & Readonly<{}> & Readonly<{ children?: ReactNode; }>
 
 class App extends Component<{}, 
@@ -21,33 +22,12 @@ class App extends Component<{},
   account: any,
   exodusCount: any,
   exodusArray: ReadonlyArray<{}>,
-  exodusListContract: Readonly<{}>,
+  exodusListContract: Readonly<{ methods: { } }>,
   loading: any,
   web3: any,
 }> {
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      account: '',
-      exodusCount: 0,
-      exodusArray: [],
-      exodusListContract: [],
-      loading: true,
-      web3: wa.web3,
-    }
-    this.createExodus = this.createExodus.bind(this);
-    this.toggleCompleted = this.toggleCompleted.bind(this);
-  }
-
-  componentWillMount() {
-    var web3 = wa.web3;
-    //new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
-    this.setState({ web3 });
-    this.loadBlockchainData();
-  }
-
   async loadBlockchainData () {
-    const web3 = wa.web3;
+    const web3 = whereyouat.web3;
     //this.state.web3;
     //new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
     const accounts = await web3.eth.getAccounts();
@@ -177,8 +157,9 @@ class App extends Component<{},
         "signature": "0x455f5024"
       }
     ]);
-    const exodusListContract = exodusContract.at(0x43ea664467C2572B4e8B3E9c9f627EFB14D8BbF9);
+    exodusListContract = exodusContract.at(0x43ea664467C2572B4e8B3E9c9f627EFB14D8BbF9);
     this.setState({ exodusListContract });
+
     const exodusCount = await exodusListContract.methods.exodusCount().call();
     this.setState({ exodusCount });
     for(let i = 1; i <= exodusCount; i++) {
@@ -191,9 +172,31 @@ class App extends Component<{},
     this.setState({ loading: false })
   }
 
+
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      account: '',
+      exodusCount: 0,
+      exodusArray: [],
+      exodusListContract: { methods: { } },
+      loading: true,
+      web3: whereyouat.web3,
+    }
+    this.createExodus = this.createExodus.bind(this);
+    this.toggleCompleted = this.toggleCompleted.bind(this);
+  }
+
+  componentWillMount() {
+    var web3 = whereyouat.web3;
+    //new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
+    this.setState({ web3 });
+    this.loadBlockchainData();
+  }
+
   createExodus(content: string) {
     this.setState({ loading: true });
-    this.state.exodusListContract.methods.createExodus(content).send({ from: this.state.account })
+    exodusListContract.methods.createExodus(content).send({ from: this.state.account })
     .on('receipt', (receipt: any) => {
       console.log('receipt', receipt);
       //sends require ether
@@ -203,7 +206,7 @@ class App extends Component<{},
 
   toggleCompleted(exodusId: number) {
     this.setState({ loading: true });
-    this.state.exodusListContract.methods.toggleCompleted(exodusId).send({ from: this.state.account })
+    exodusListContract.methods.toggleCompleted(exodusId).send({ from: this.state.account })
     .on('receipt', (receipt: any) => {
       this.setState({ loading: false });
     });
