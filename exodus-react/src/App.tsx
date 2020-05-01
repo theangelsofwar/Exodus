@@ -12,12 +12,12 @@ import getWeb3 from './utils/getWeb3';
 
 //creating a closure
 var whereyouat = window as any;
-
+var contract: any;
 
 const initialState : any = {
   accounts: [],
   exodusContract: {},
-  web3: {},
+  web3: null,
   account: '0x0',
   exodusCount: 0,
   exodusArray: [],
@@ -46,6 +46,8 @@ const App = (props: any) => {
     const init = async() => {
       try {
         const web3: any = await getWeb3();
+        //the web3 is the provider from the helper util function
+
         const accounts: any = await web3.eth.getAccounts();
         const account: any = accounts[0];
         const networkId: number = await web3.eth.net.getId();
@@ -53,17 +55,17 @@ const App = (props: any) => {
         const deployedNetwork = ExodusList.networks[networkId];
         //Contract.networks[networkId];
 
-        const instance = new web3.eth.Contract(
-          ExodusList.abi, 
-          deployedNetwork && deployedNetwork.address,
-        );
+        var contractInstance = new web3.eth.Contract(ExodusList.abi);
+        var instance = contractInstance.at(0x43ea664467C2572B4e8B3E9c9f627EFB14D8BbF9);
+      // deployedNetwork && deployedNetwork.address,
+
+      //  contract = new TruffleContract(instance);
 
         dispatch({
           accounts, 
           account,
           exodusContract: instance, 
-          web3,
-          loading
+          web3
         });
 
       } catch(error) {
@@ -105,10 +107,10 @@ const App = (props: any) => {
 
   const loadBlockchainData = async() =>  {
     const { exodusContract, accounts, exodusArray}: any = state;
-    // await exodusContract.methods.set('sent from mars').send({ from: accounts[0] });    
-    const exodusCount: any = await exodusContract.methods.exodusCount().call();
+    // await exodusContract.methods.set('sent from mars').send({ from: accounts[0] }); 
+    const exodusCount: any = await exodusContract.exodusCount();
     setExodusCount(exodusCount);
-
+    
     for(let i = 1; i <= exodusCount; i++) {
       //  holy fucking shit the reason is that solidity indexes at 1 dumb fucking bitch
       let exodus = await exodusContract.functions.exodusArray(i).call(); //gets are .call() and do not require, ether, 

@@ -1,5 +1,6 @@
 import Web3 from 'web3';
 
+
 interface Window {
   ethereum: any;
   web3: any;
@@ -24,10 +25,12 @@ export default() => new Promise((resolve, reject) => {
         console.log('Web3 detected');
         resolve(web3);
       } else {
-        const provider: any = new Web3.providers.HttpProvider("http://0.0.0.0:7545");
+        const provider: any = new Web3.providers.HttpProvider('http://localhost:7545');
         const web3: any = new Web3(provider);
         console.log("No web3 instance, use locals");
         resolve(web3);
+
+        return web3;
       }
   })
 });

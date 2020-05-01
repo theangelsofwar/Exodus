@@ -39,7 +39,7 @@ const ExodusListCompound = (props: any) => {
           <input type="submit" hidden={true} />
         </form>
         <ul id="exodusList" className="list-unstyled">
-          { this.state.exodusArray.map((exodus, key) => {
+          {props.exodusArray.map((exodus: any, key: any) => {
             return(
               <div id="exodusTemplate" className="exodusTemplate" key={key}>
                 <label>
@@ -49,7 +49,7 @@ const ExodusListCompound = (props: any) => {
                     defaultChecked={exodus.completed}
                     onChange={handleCompletedChange}
                     onClick={(event) => {
-                      this.props.toggleCompleted(exodus.name) }} />
+                      props.toggleCompleted(exodus.name) }} />
                     <span className="content"> {exodus.content} </span>
                 </label>
               </div>)
