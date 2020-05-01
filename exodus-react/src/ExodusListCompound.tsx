@@ -5,7 +5,7 @@ interface Props {
   createExodus: any,
   toggleExodus: any
 }
-class ExodusList extends Component {
+const ExodusListCompound = () => {
   constructor({ exodusArray, createExodus, toggleExodus }: Props, {
     
   }) {
@@ -32,8 +32,6 @@ class ExodusList extends Component {
     event.preventDefault();
     this.props.createExodus(event.target.value);
   }
-
-  render() {
     return (
       <React.Fragment>
       <div id="content">
@@ -69,8 +67,7 @@ class ExodusList extends Component {
         </ul>
       </div>
       </React.Fragment>
-    );
-  }
+    )
 }
 
-export default ExodusList;
+export default ExodusListCompound;
