@@ -1,44 +1,60 @@
-import { EXODUS_LIST_ABI, EXODUS_LIST_ADDRESS } from './config';
-import Web3 from 'web3';
+// import { EXODUS_LIST_ABI, EXODUS_LIST_ADDRESS } from './config';
+// import * as  Web3 from 'web3';
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import ExodusList from './ExodusList';
-import 'ethereumjs-testrpc';
-
+// import 'ethereumjs-testrpc';
+import Web3 from 'web3';
 //exodus list is the smart contract, while exodusArray is the entire list iteself
-// interface Props {
-//   account: any,
-//   exodusCount: any,
-//   exodusArray: any,
-//   exodusList: any,
-//   loading: any
-// }
-class App extends Component {
+
+//creating a closure
+var wa = window as any;
+if (window.hasOwnProperty('web3')) {
+  wa.web3 = new Web3(wa.web3.currentProvider);
+} else {
+  wa.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
+}
+//<ExodusList> & Readonly<{}> & Readonly<{ children?: ReactNode; }>
+
+class App extends Component<{}, 
+{ 
+  account: any,
+  exodusCount: any,
+  exodusArray: ReadonlyArray<{}>,
+  exodusListContract: Readonly<{}>,
+  loading: any,
+  web3: any,
+}> {
   constructor(props: any) {
     super(props);
     this.state = {
       account: '',
       exodusCount: 0,
       exodusArray: [],
-      exodusList: [],
-      loading: true
+      exodusListContract: [],
+      loading: true,
+      web3: wa.web3,
     }
     this.createExodus = this.createExodus.bind(this);
     this.toggleCompleted = this.toggleCompleted.bind(this);
   }
 
   componentWillMount() {
+    var web3 = wa.web3;
+    //new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
+    this.setState({ web3 });
     this.loadBlockchainData();
   }
 
-  async loadBlockchainData (){
-    var web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:8545/'));
-    web3.eth.defaultAccount = web3.eth.accounts[0];
-    var accounts = await web3.eth.getAccounts();
+  async loadBlockchainData () {
+    const web3 = wa.web3;
+    //this.state.web3;
+    //new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
+    const accounts = await web3.eth.getAccounts();
+    web3.eth.defaultAccount = await web3.eth.accounts[0];
     this.setState({ account: accounts[0] });
 
-    const exodusList = new web3.eth.Contract([
+    const exodusContract = new web3.eth.Contract([
       {
         "constant": true,
         "inputs": [
@@ -160,13 +176,14 @@ class App extends Component {
         "type": "function",
         "signature": "0x455f5024"
       }
-    ], 0x43ea664467C2572B4e8B3E9c9f627EFB14D8BbF9);
-    this.setState({ exodusList });
-    const exodusCount = await exodusList.methods.exodusCount().call();
+    ]);
+    const exodusListContract = exodusContract.at(0x43ea664467C2572B4e8B3E9c9f627EFB14D8BbF9);
+    this.setState({ exodusListContract });
+    const exodusCount = await exodusListContract.methods.exodusCount().call();
     this.setState({ exodusCount });
     for(let i = 1; i <= exodusCount; i++) {
       //  holy fucking shit the reason is that solidity indexes at 1 dumb fucking bitch
-      let exodus = await exodusList.methods.exodusArray(i).call();
+      let exodus = await exodusListContract.methods.exodusArray(i).call(); //gets are .call() and do not require, ether, 
       this.setState({
         exodusArray: [...this.state.exodusArray, exodus]
       })
@@ -174,19 +191,20 @@ class App extends Component {
     this.setState({ loading: false })
   }
 
-  createExodus(content: any){
+  createExodus(content: string) {
     this.setState({ loading: true });
-    this.state.exodusList.methods.createExodus(content).send({ from: this.state.account })
-    .once('receipt', (receipt: any) => {
+    this.state.exodusListContract.methods.createExodus(content).send({ from: this.state.account })
+    .on('receipt', (receipt: any) => {
       console.log('receipt', receipt);
-      this.setState({ loading: false })
+      //sends require ether
+      this.setState({ loading: false });
     })
   }
 
-  toggleCompleted(exodusId: any){
+  toggleCompleted(exodusId: number) {
     this.setState({ loading: true });
-    this.state.exodusList.methods.toggleCompleted(exodusId).send({ from: this.state.account })
-    .once('receipt', (receipt: any) => {
+    this.state.exodusListContract.methods.toggleCompleted(exodusId).send({ from: this.state.account })
+    .on('receipt', (receipt: any) => {
       this.setState({ loading: false });
     });
   }
@@ -195,6 +213,7 @@ class App extends Component {
 
   render() {
     return(
+      <React.Fragment>
       <div className="app">
         <nav className="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
           <a className="navbar-brand col-sm-3 col-md-2 mr-0" href="http://angiechangpagne.com" > Exodus </a>
@@ -215,6 +234,7 @@ class App extends Component {
           </main>
         </div>
       </div>
+      </React.Fragment>
     );
   }
 }

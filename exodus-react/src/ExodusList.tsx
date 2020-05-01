@@ -6,7 +6,9 @@ interface Props {
   toggleExodus: any
 }
 class ExodusList extends Component {
-  constructor({ exodusArray, createExodus, toggleExodus }: Props) {
+  constructor({ exodusArray, createExodus, toggleExodus }: Props, {
+    
+  }) {
     super({ exodusArray, createExodus, toggleExodus });
     this.state = {
       exodusArray: exodusArray,
@@ -33,6 +35,7 @@ class ExodusList extends Component {
 
   render() {
     return (
+      <React.Fragment>
       <div id="content">
         <form onSubmit={this.handleSubmit} >
           <input 
@@ -65,6 +68,7 @@ class ExodusList extends Component {
         <ul id="completedExodusList" className="list-unstyled">
         </ul>
       </div>
+      </React.Fragment>
     );
   }
 }
