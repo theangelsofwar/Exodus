@@ -31,7 +31,7 @@ const reducer = (state: any, action: any) => ({
     web3: action.web3
   })
 
-const App = () => {
+const App = (props: any) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [exodusCount, setExodusCount] = useState(0);
   const [exodusArray, setExodusArray] = useState([]);
@@ -62,7 +62,8 @@ const App = () => {
           accounts, 
           account,
           exodusContract: instance, 
-          web3
+          web3,
+          loading
         });
 
       } catch(error) {
@@ -105,13 +106,13 @@ const App = () => {
   const loadBlockchainData = async() =>  {
     const { exodusContract, accounts, exodusArray}: any = state;
     // await exodusContract.methods.set('sent from mars').send({ from: accounts[0] });    
-    const exodusCount: number = await exodusContract.methods.exodusCount().call();
+    const exodusCount: any = await exodusContract.methods.exodusCount().call();
     setExodusCount(exodusCount);
 
     for(let i = 1; i <= exodusCount; i++) {
       //  holy fucking shit the reason is that solidity indexes at 1 dumb fucking bitch
-      let exodus = await exodusContract.methods.exodusArray(i).call(); //gets are .call() and do not require, ether, 
-      setExodusArray([...exodusArray, exodus]);
+      let exodus = await exodusContract.functions.exodusArray(i).call(); //gets are .call() and do not require, ether, 
+      setExodusArray([...exodusArray, exodus] as any);
     }
     setLoading(false);
     // const accounts = await web3.eth.getAccounts();
@@ -158,10 +159,10 @@ const App = () => {
         </nav>
         <div className="container-fluid">
           <main>
-            { state.loading 
+            { loading 
             ? (<div id="loader">Loading...</div>)  
             : (<ExodusListCompound
-              exodusArray={state.exodusArray} 
+              exodusArray={exodusArray} 
               createExodus={createExodus}
               toggleCompleted={toggleCompleted} 
             />)

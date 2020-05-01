@@ -24,7 +24,7 @@ export default() => new Promise((resolve, reject) => {
         console.log('Web3 detected');
         resolve(web3);
       } else {
-        const provider: any = new Web3.providers.HttpProvider("http://127.0.0.1:7545");
+        const provider: any = new Web3.providers.HttpProvider("http://0.0.0.0:7545");
         const web3: any = new Web3(provider);
         console.log("No web3 instance, use locals");
         resolve(web3);

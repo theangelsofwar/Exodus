@@ -2,8 +2,8 @@ import React, { useState, useEffect, useContext } from 'react';
 
 const initialState: any = {
   exodusArray: [],
-  createExodus: any,
-  toggleExodus: any,
+  createExodus: {},
+  toggleExodus: {},
 }
 const ExodusListCompound = (props: any) => {
   const [exodusArray, setExodusArray] = useState([]);
