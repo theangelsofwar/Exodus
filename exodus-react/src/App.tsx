@@ -1,5 +1,3 @@
-// import { EXODUS_LIST_ABI, EXODUS_LIST_ADDRESS } from './config';
-// import * as  Web3 from 'web3';
 import React, { useEffect, useReducer, useState } from 'react';
 import './App.css';
 import ExodusListCompound from './ExodusListCompound';
@@ -55,8 +53,9 @@ const App = (props: any) => {
         const deployedNetwork = ExodusList.networks[networkId];
         //Contract.networks[networkId];
 
-        var contractInstance = new web3.eth.Contract(ExodusList.abi);
-        var instance = contractInstance.at(0x43ea664467C2572B4e8B3E9c9f627EFB14D8BbF9);
+        var instance = new web3.eth.Contract(ExodusList.abi,"0xf40846C34d2A4C20d426472C8CA07A699a737193");
+        console.log('instance', instance);
+        //var instance = contractInstance.at(0x43ea664467C2572B4e8B3E9c9f627EFB14D8BbF9);
       // deployedNetwork && deployedNetwork.address,
 
       //  contract = new TruffleContract(instance);
@@ -108,12 +107,12 @@ const App = (props: any) => {
   const loadBlockchainData = async() =>  {
     const { exodusContract, accounts, exodusArray}: any = state;
     // await exodusContract.methods.set('sent from mars').send({ from: accounts[0] }); 
-    const exodusCount: any = await exodusContract.exodusCount();
+    const exodusCount: any = await exodusContract.exodusCount.call().call(() => console.log('calling twice'));
     setExodusCount(exodusCount);
     
     for(let i = 1; i <= exodusCount; i++) {
       //  holy fucking shit the reason is that solidity indexes at 1 dumb fucking bitch
-      let exodus = await exodusContract.functions.exodusArray(i).call(); //gets are .call() and do not require, ether, 
+      let exodus = await exodusContract.functions.exodusArray(i).call().call(() => console.log('must call call() twice and change the node_modules in eth-contract conditionals')); //gets are .call() and do not require, ether, 
       setExodusArray([...exodusArray, exodus] as any);
     }
     setLoading(false);

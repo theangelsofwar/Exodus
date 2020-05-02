@@ -30,7 +30,7 @@ export default() => new Promise((resolve, reject) => {
         console.log("No web3 instance, use locals");
         resolve(web3);
 
-        return web3;
+        // return web3;
       }
   })
 });

@@ -24,6 +24,7 @@
     "truffle-contract": "^3.0.6"
   },
   "dependencies": {
+    "live-server": "^1.2.1",
     "solc": "^0.6.6",
     "web3": "^1.2.7"
   }
