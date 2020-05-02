@@ -16,6 +16,7 @@ export default() => new Promise((resolve, reject) => {
         try {
           await window.ethereum.enable();
           resolve(web3);
+          return web3;
         } catch(error) {
           reject(error);
         }
@@ -24,13 +25,14 @@ export default() => new Promise((resolve, reject) => {
         //legacey dApp browser
         console.log('Web3 detected');
         resolve(web3);
+        return web3;
       } else {
         const provider: any = new Web3.providers.HttpProvider('http://localhost:7545');
         const web3: any = new Web3(provider);
         console.log("No web3 instance, use locals");
         resolve(web3);
 
-        // return web3;
+        return web3;
       }
   })
 });
